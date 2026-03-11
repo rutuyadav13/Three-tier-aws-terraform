@@ -1,14 +1,14 @@
 <?php
 
 $host = "RDS_ENDPOINT";
-$dbname = "appdb";
 $user = "admin";
 $password = "StrongPassword123";
+$db = "notesdb";
 
-$conn = new mysqli($host,$user,$password,$dbname);
+$conn = new mysqli($host,$user,$password,$db);
 
 if($conn->connect_error){
-die("Connection failed");
+die("Database connection failed");
 }
 
 ?>
