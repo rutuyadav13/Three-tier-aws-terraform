@@ -9,8 +9,3 @@ resource "aws_vpc" "three_tier_vpc" {
     Name = "three-tier-vpc"
   }
 }
-
-  depends_on = [
-    aws_internet_gateway.igw
-  ]
-}
