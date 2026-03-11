@@ -2,7 +2,7 @@ resource "aws_launch_template" "frontend_lt" {
 
   name_prefix   = "frontend-template"
   image_id      = "ami-0b6c6ebed2801a5cb"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 
   vpc_security_group_ids = [
     aws_security_group.frontend_server_sg.id
@@ -41,7 +41,7 @@ resource "aws_launch_template" "backend_lt" {
 
   name_prefix   = "backend-template"
   image_id      = "ami-0b6c6ebed2801a5cb"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 
   vpc_security_group_ids = [
     aws_security_group.backend_server_sg.id
