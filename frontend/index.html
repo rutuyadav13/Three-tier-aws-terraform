@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Three Tier App</title>
-<link rel="stylesheet" href="styles.css">
+<title>Visitor Notes App</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>Hello from Three Tier Application</h1>
+<h1>Visitor Notes</h1>
 
-<input type="text" id="message" placeholder="Enter message">
-<button onclick="sendMessage()">Send</button>
+<input id="noteInput" placeholder="Write a note">
+<button onclick="addNote()">Add Note</button>
 
-<h2>Messages</h2>
-<ul id="messages"></ul>
+<h2>All Notes</h2>
+<ul id="noteList"></ul>
 
-<script src="script.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
