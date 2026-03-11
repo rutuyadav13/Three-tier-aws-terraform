@@ -1,7 +1,7 @@
 resource "aws_launch_template" "frontend_lt" {
 
   name_prefix   = "frontend-template"
-  image_id      = "ami-0c55b159cbfafe1f0"
+  image_id      = "ami-0b6c6ebed2801a5cb"
   instance_type = "t2.micro"
 
   vpc_security_group_ids = [
@@ -40,7 +40,7 @@ EOF
 resource "aws_launch_template" "backend_lt" {
 
   name_prefix   = "backend-template"
-  image_id      = "ami-0c55b159cbfafe1f0"
+  image_id      = "ami-0b6c6ebed2801a5cb"
   instance_type = "t2.micro"
 
   vpc_security_group_ids = [
