@@ -65,8 +65,8 @@ RDS_ENDPOINT="YOUR_RDS_ENDPOINT"
 DB_USER="admin"
 DB_PASS="StrongPassword123"
 
-mysql -h $RDS_ENDPOINT -u $DB_USER -p$DB_PASS < Three-tier-aws-terraform/database/init.sql
-
+ mysql -h $RDS_ENDPOINT -u $DB_USER -p$DB_PASS < Three-tier-aws-terraform/database/init.sql
+    
 systemctl restart apache2
 
 EOF
