@@ -8,14 +8,23 @@ resource "aws_launch_template" "frontend_lt" {
     aws_security_group.frontend_server_sg.id
   ]
 
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              apt update -y
-              apt install nginx -y
-              systemctl start nginx
-              systemctl enable nginx
-              EOF
-  )
+user_data = base64encode(<<-EOF
+#!/bin/bash
+
+apt update -y
+apt install nginx git -y
+
+cd /var/www/html
+
+git clone https://github.com/YOUR_USERNAME/three-tier-aws-terraform.git
+
+cp -r three-tier-aws-terraform/frontend/* /var/www/html/
+
+systemctl start nginx
+systemctl enable nginx
+
+EOF
+)
 
   tag_specifications {
     resource_type = "instance"
@@ -38,15 +47,23 @@ resource "aws_launch_template" "backend_lt" {
     aws_security_group.backend_server_sg.id
   ]
 
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              apt update -y
-              apt install apache2 php php-mysql mysql-client -y
-              systemctl start apache2
-              systemctl enable apache2
-              EOF
-  )
+user_data = base64encode(<<-EOF
+#!/bin/bash
 
+apt update -y
+apt install apache2 php php-mysql mysql-client git -y
+
+cd /var/www/html
+
+git clone https://github.com/YOUR_USERNAME/three-tier-aws-terraform.git
+
+cp -r three-tier-aws-terraform/backend/* /var/www/html/
+
+systemctl start apache2
+systemctl enable apache2
+
+EOF
+)
   tag_specifications {
     resource_type = "instance"
 
