@@ -1,5 +1,4 @@
 resource "aws_launch_template" "frontend_lt" {
-
   name_prefix   = "frontend-template"
   image_id      = "ami-0b6c6ebed2801a5cb"
   instance_type = "t3.micro"
@@ -8,37 +7,34 @@ resource "aws_launch_template" "frontend_lt" {
     aws_security_group.frontend_server_sg.id
   ]
 
-user_data = base64encode(<<-EOF
-#!/bin/bash
+  user_data = base64encode(<<-EOF
+    #!/bin/bash
+    exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
-apt update -y
-apt install nginx git -y
+    apt update -y
+    apt install -y nginx git
 
-cd /var/www/html
+    # Create a simple index.html so health check passes
+    echo "<h1>Frontend Server Running</h1>" > /var/www/html/index.html
 
-git clone https://github.com/rutuyadav13/Three-tier-aws-terraform.git
+    cd /var/www/html
+    git clone https://github.com/rutuyadav13/Three-tier-aws-terraform.git
+    cp -r three-tier-aws-terraform/frontend/* /var/www/html/
 
-cp -r three-tier-aws-terraform/frontend/* /var/www/html/
-
-systemctl start nginx
-systemctl enable nginx
-
-EOF
-)
+    systemctl start nginx
+    systemctl enable nginx
+  EOF
+  )
 
   tag_specifications {
     resource_type = "instance"
-
     tags = {
       Name = "frontend-server"
     }
   }
-
 }
 
-
 resource "aws_launch_template" "backend_lt" {
-
   name_prefix   = "backend-template"
   image_id      = "ami-0b6c6ebed2801a5cb"
   instance_type = "t3.micro"
@@ -47,36 +43,36 @@ resource "aws_launch_template" "backend_lt" {
     aws_security_group.backend_server_sg.id
   ]
 
-user_data = base64encode(<<-EOF
-#!/bin/bash
+  user_data = base64encode(<<-EOF
+    #!/bin/bash
+    exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
-#!/bin/bash
+    apt update -y
+    apt install -y apache2 php php-mysql mysql-client git
 
-apt update -y
-apt install apache2 php php-mysql mysql-client git -y
+    # Create a simple index.html to pass health check
+    echo "<h1>Backend Server Running</h1>" > /var/www/html/index.html
 
-cd /home/ubuntu
+    cd /home/ubuntu
+    git clone https://github.com/rutuyadav13/Three-tier-aws-terraform.git
+    cp -r Three-tier-aws-terraform/backend/api/* /var/www/html/
 
-git clone https://github.com/rutuyadav13/Three-tier-aws-terraform.git
+    # Replace with your actual RDS endpoint and credentials
+    RDS_ENDPOINT="YOUR_RDS_ENDPOINT"
+    DB_USER="admin"
+    DB_PASS="StrongPassword123"
 
-cp -r Three-tier-aws-terraform/backend/api/* /var/www/html/
+    # Initialize database
+    mysql -h $RDS_ENDPOINT -u $DB_USER -p$DB_PASS < Three-tier-aws-terraform/database/init.sql
 
-RDS_ENDPOINT="YOUR_RDS_ENDPOINT"
-DB_USER="admin"
-DB_PASS="StrongPassword123"
+    systemctl restart apache2
+  EOF
+  )
 
- mysql -h $RDS_ENDPOINT -u $DB_USER -p$DB_PASS < Three-tier-aws-terraform/database/init.sql
-    
-systemctl restart apache2
-
-EOF
-)
   tag_specifications {
     resource_type = "instance"
-
     tags = {
       Name = "backend-server"
     }
   }
-
 }
