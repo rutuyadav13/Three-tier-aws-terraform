@@ -1,17 +1,17 @@
-const apiUrl = "http://BACKEND_ALB_DNS/api";
+const API_URL = "http://BACKEND_ALB_DNS";
 
-function loadMessages() {
+function loadNotes(){
 
-fetch(`${apiUrl}/get_messages.php`)
-.then(response => response.json())
+fetch(`${API_URL}/fetch_notes.php`)
+.then(res => res.json())
 .then(data => {
 
-const list = document.getElementById("messages");
-list.innerHTML = "";
+const list = document.getElementById("noteList");
+list.innerHTML="";
 
-data.forEach(msg => {
-const li = document.createElement("li");
-li.textContent = msg.message;
+data.forEach(note=>{
+const li=document.createElement("li");
+li.textContent = note.note;
 list.appendChild(li);
 });
 
@@ -19,18 +19,23 @@ list.appendChild(li);
 
 }
 
-function sendMessage(){
+function addNote(){
 
-const message = document.getElementById("message").value;
+const note=document.getElementById("noteInput").value;
 
-fetch(`${apiUrl}/save_message.php`,{
+fetch(`${API_URL}/add_note.php`,{
 
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({message:message})
+body:JSON.stringify({note:note})
 
-}).then(()=>loadMessages());
+}).then(()=>{
+
+document.getElementById("noteInput").value="";
+loadNotes();
+
+});
 
 }
 
-loadMessages();
+loadNotes();
