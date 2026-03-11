@@ -43,12 +43,10 @@ resource "aws_route_table" "private_route_table" {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat.id
   }
-}
 
   tags = {
-    Name = "three-tier-private-rt"
+    Name = "private-route-table"
   }
-
 }
 
 resource "aws_route_table_association" "web_private_1a_assoc" {
