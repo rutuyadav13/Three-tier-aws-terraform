@@ -37,7 +37,8 @@ resource "aws_route_table_association" "web_public_1c_assoc" {
 }
 
 resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.main.id
+
+  vpc_id = aws_vpc.three_tier_vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
